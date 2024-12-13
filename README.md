@@ -1,6 +1,6 @@
-# aitobu_sales
+# Aitobu Sales
 
-A new Flutter project.
+Project to create Aitobu Pos System. Still in early stage
 
 ## Getting Started
 
