@@ -1,6 +1,6 @@
-import 'package:aitobu_sales/view/view_item.dart';
+import 'package:aitobu_sales/view/view_profile.dart';
 import 'package:aitobu_sales/view/view_receipt.dart';
-import 'package:aitobu_sales/view/view_ticket.dart';
+import 'package:aitobu_sales/view/view_sales.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
         body: FadeIndexedStack(
           index: _index,
           children: const [
-            ViewTicket(),
+            ViewSales(),
             ViewReceipt(),
             ViewProfile(),
           ],
@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
           selectedIndex: _index,
           // labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           destinations: const [
-            NavigationDestination(icon: Icon(Icons.confirmation_num), label: 'Ticket'),
+            NavigationDestination(icon: Icon(Icons.confirmation_num), label: 'Sales'),
             NavigationDestination(icon: Icon(Icons.receipt), label: 'Receipt'),
             NavigationDestination(icon: Icon(Icons.account_circle), label: 'Profile'),
           ],

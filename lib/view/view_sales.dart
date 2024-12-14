@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import '../model/item.dart';
 
-class ViewTicket extends StatefulWidget {
-  const ViewTicket({super.key});
+class ViewSales extends StatefulWidget {
+  const ViewSales({super.key});
 
   @override
-  State<ViewTicket> createState() => _ViewTicketState();
+  State<ViewSales> createState() => _ViewSalesState();
 }
 
-class _ViewTicketState extends State<ViewTicket> {
+class _ViewSalesState extends State<ViewSales> {
   final controllerTicket = ControllerTicket();
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class _ViewTicketState extends State<ViewTicket> {
               icon: const Icon(Icons.shopping_bag),
             ),
       appBar: AppBar(
-        title: const Text('Ticket'),
+        title: const Text('Sales'),
         leading: const Icon(Icons.confirmation_num),
         actions: [
           PopupMenuButton(
