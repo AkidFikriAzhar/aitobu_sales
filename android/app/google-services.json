@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "112775318785",
+    "project_id": "aitobu-database",
+    "storage_bucket": "aitobu-database.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112775318785:android:b3240b2987c5d3a76a9f00",
+        "android_client_info": {
+          "package_name": "com.aitobu.sales"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzdioAJ8zL9pmItdF776Z17SegHDhEAiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

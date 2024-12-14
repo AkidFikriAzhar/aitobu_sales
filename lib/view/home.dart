@@ -28,9 +28,9 @@ class _HomeState extends State<Home> {
       child: Scaffold(
         body: FadeIndexedStack(
           index: _index,
-          children: const [
-            ViewSales(),
-            ViewReceipt(),
+          children: [
+            const ViewSales(),
+            const ViewReceipt(),
             ViewProfile(),
           ],
         ),

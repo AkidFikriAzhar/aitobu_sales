@@ -1,16 +1,1 @@
-{
-  "hosting": {
-    "public": "build/web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
+{"hosting":{"public":"build/web","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]},"flutter":{"platforms":{"android":{"default":{"projectId":"aitobu-database","appId":"1:112775318785:android:b3240b2987c5d3a76a9f00","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"aitobu-database","appId":"1:112775318785:ios:8c692f0a681b00d46a9f00","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"aitobu-database","appId":"1:112775318785:ios:bac4347e65ab69116a9f00","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"aitobu-database","configurations":{"android":"1:112775318785:android:b3240b2987c5d3a76a9f00","ios":"1:112775318785:ios:8c692f0a681b00d46a9f00","macos":"1:112775318785:ios:bac4347e65ab69116a9f00","web":"1:112775318785:web:8523b7868446e0316a9f00","windows":"1:112775318785:web:59e641942ff1fc106a9f00"}}}}}}
