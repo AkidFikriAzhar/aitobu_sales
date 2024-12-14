@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ViewItem extends StatelessWidget {
-  const ViewItem({super.key});
+class ViewProfile extends StatelessWidget {
+  const ViewProfile({super.key});
 
   @override
   Widget build(BuildContext context) {

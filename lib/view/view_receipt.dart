@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ViewProfile extends StatelessWidget {
-  const ViewProfile({super.key});
+class ViewReceipt extends StatelessWidget {
+  const ViewReceipt({super.key});
 
   @override
   Widget build(BuildContext context) {
