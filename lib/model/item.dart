@@ -1,15 +1,13 @@
-import 'dart:ui';
-
 import 'package:aitobu_sales/model/section.dart';
 
 class Item {
   final String id;
   final String name;
   final double price;
-  final double cost;
+  final double? cost;
   final int? stock;
   final String? imgUrl;
-  final Color colors;
+  final int colors;
   final Section? category;
 
   Item({
@@ -22,4 +20,30 @@ class Item {
     required this.colors,
     required this.category,
   });
+
+  factory Item.fromFirestore(dynamic doc) {
+    return Item(
+      id: doc['id'] ?? '',
+      name: doc['name'] ?? '',
+      price: doc['price'] ?? '',
+      cost: doc['cost'] ?? '',
+      stock: doc['stock'] ?? '',
+      imgUrl: doc['imgUrl'] ?? '',
+      colors: doc['colors'] ?? '',
+      category: doc['category'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'cost': cost,
+      'stock': stock,
+      'imgUrl': imgUrl,
+      'color': colors,
+      'category': category,
+    };
+  }
 }

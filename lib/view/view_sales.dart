@@ -20,12 +20,18 @@ class _ViewSalesState extends State<ViewSales> {
           ? null
           : FloatingActionButton.extended(
               onPressed: () {},
-              label: Text('Charge ${controllerTicket.ticket.length}'),
+              label: Text('Charge RM${controllerTicket.amount().toStringAsFixed(2)}'),
               icon: const Icon(Icons.shopping_bag),
             ),
       appBar: AppBar(
         title: const Text('Sales'),
-        leading: const Icon(Icons.confirmation_num),
+        leading: TextButton(
+          onPressed: () {},
+          child: const Text(
+            '10',
+            style: TextStyle(fontSize: 17),
+          ),
+        ),
         actions: [
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
@@ -62,7 +68,7 @@ class _ViewSalesState extends State<ViewSales> {
               size: 35,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: listItem.colors,
+                color: Color(listItem.colors),
               ),
               children: [
                 itemNo <= 0
@@ -99,7 +105,7 @@ class _ViewSalesState extends State<ViewSales> {
             title: Text(listItem.name),
             subtitle: listItem.stock == null ? const Text('--') : Text('Stock: ${listItem.stock.toString()}'),
             trailing: Text(
-              'RM${listItem.price}',
+              'RM${listItem.price.toStringAsFixed(2)}',
               style: const TextStyle(fontSize: 12),
             ),
             onTap: () {

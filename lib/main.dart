@@ -33,11 +33,76 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green, brightness: Brightness.dark),
         useMaterial3: true,
         brightness: Brightness.dark,
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.black26,
+          contentPadding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(width: 0, color: Colors.transparent),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(width: 0, color: Colors.transparent),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              width: 2,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              width: 2,
+            ),
+          ),
+          errorStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green, brightness: Brightness.light),
         useMaterial3: true,
         brightness: Brightness.light,
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.black.withOpacity(0.05),
+          contentPadding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(width: 0, color: Colors.transparent),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(width: 0, color: Colors.transparent),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              width: 2,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              width: 2,
+            ),
+          ),
+          errorStyle: TextStyle(
+            color: Colors.amber.shade900,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       themeMode: ThemeMode.system,
     );
