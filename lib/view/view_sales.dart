@@ -47,7 +47,7 @@ class _ViewSalesState extends State<ViewSales> {
                       children: [
                         Icon(Icons.clear),
                         SizedBox(width: 10),
-                        Text('Clear charge'),
+                        Text('Clear ticket'),
                       ],
                     )),
               ];

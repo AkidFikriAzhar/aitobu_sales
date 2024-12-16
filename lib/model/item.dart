@@ -23,14 +23,14 @@ class Item {
 
   factory Item.fromFirestore(dynamic doc) {
     return Item(
-      id: doc['id'] ?? '',
-      name: doc['name'] ?? '',
-      price: doc['price'] ?? '',
-      cost: doc['cost'] ?? '',
-      stock: doc['stock'] ?? '',
-      imgUrl: doc['imgUrl'] ?? '',
-      colors: doc['colors'] ?? '',
-      category: doc['category'] ?? '',
+      id: doc['id'],
+      name: doc['name'],
+      price: doc['price'],
+      cost: doc['cost'],
+      stock: doc['stock'],
+      imgUrl: doc['imgUrl'],
+      colors: doc['color'],
+      category: doc['category'],
     );
   }
 

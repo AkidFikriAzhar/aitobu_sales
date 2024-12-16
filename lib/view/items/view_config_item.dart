@@ -1,10 +1,13 @@
 import 'package:aitobu_sales/component/caption_title.dart';
-import 'package:aitobu_sales/controller/controller_add_items.dart';
+import 'package:aitobu_sales/controller/controller_config_items.dart';
+import 'package:aitobu_sales/model/item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ViewConfigItem extends StatefulWidget {
-  const ViewConfigItem({super.key});
+  final Item? currentItem;
+
+  const ViewConfigItem({super.key, required this.currentItem});
 
   @override
   State<ViewConfigItem> createState() => _ViewConfigItemState();
@@ -15,6 +18,16 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
   int _selectedColor = 0;
 
   @override
+  void initState() {
+    if (widget.currentItem != null) {
+      _controllerAddItem.id = widget.currentItem!.id;
+      _controllerAddItem.inputName.text = widget.currentItem!.name;
+      _controllerAddItem.inputPrice.text = widget.currentItem!.price.toString();
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
@@ -22,15 +35,12 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
           _controllerAddItem.priceFocus.unfocus();
           _controllerAddItem.nameFocus.unfocus();
           if (_controllerAddItem.frmKey.currentState!.validate()) {
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   const SnackBar(content: Text('Processing Data')),
-            // );
             final bool? isSubmit = await showDialog<bool>(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    icon: const Icon(Icons.save),
-                    title: const Text('Save Product'),
+                    icon: Icon(widget.currentItem != null ? Icons.edit : Icons.save),
+                    title: Text(widget.currentItem != null ? 'Edit Product' : 'Save Product'),
                     content: const Text('Make sure your product information are correct'),
                     actions: [
                       TextButton(
@@ -56,11 +66,19 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
           }
         },
         heroTag: 'item',
-        label: const Text('Save'),
-        icon: const Icon(Icons.save),
+        label: Text(widget.currentItem != null ? 'Save Edit' : 'Save'),
+        icon: Icon(widget.currentItem != null ? Icons.edit : Icons.save),
       ),
       appBar: AppBar(
-        title: const Text('Add Items'),
+        title: widget.currentItem != null ? const Text('Edit Items') : const Text('Add Items'),
+        actions: [
+          widget.currentItem == null
+              ? const SizedBox()
+              : IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.delete),
+                )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -115,7 +133,7 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
                 spacing: 10,
                 runSpacing: 10,
                 children: List.generate(_controllerAddItem.posColor.length, (index) {
-                  return InkWell(
+                  return GestureDetector(
                     onTap: () {
                       setState(() {
                         _selectedColor = index;
@@ -133,6 +151,7 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
                   );
                 }),
               ),
+              const SizedBox(height: 100),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
+import 'package:aitobu_sales/model/item.dart';
 import 'package:aitobu_sales/view/home.dart';
 import 'package:aitobu_sales/view/items/view_config_item.dart';
-import 'package:aitobu_sales/view/items/view_items.dart';
+import 'package:aitobu_sales/view/items/view_all_items.dart';
 import 'package:aitobu_sales/view/view_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +10,7 @@ class MyRouter {
   static const home = '/';
   static const login = '/login';
   static const items = '/item';
-  static const addItems = '/add';
+  static const configItems = '/config';
 
   final router = GoRouter(
     initialLocation: FirebaseAuth.instance.currentUser == null ? login : home,
@@ -24,11 +25,11 @@ class MyRouter {
       ),
       GoRoute(
         path: items,
-        builder: (context, state) => const ViewAllItems(),
+        builder: (context, state) => ViewAllItems(),
       ),
       GoRoute(
-        path: addItems,
-        builder: (context, state) => const ViewConfigItem(),
+        path: configItems,
+        builder: (context, state) => ViewConfigItem(currentItem: state.extra as Item?),
       ),
     ],
   );

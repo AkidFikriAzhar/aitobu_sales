@@ -12,6 +12,8 @@ class ControllerConfigItems {
 
   final frmKey = GlobalKey<FormState>();
 
+  String id = DateTime.now().microsecondsSinceEpoch.toString();
+
   List<Color> posColor = [
     Colors.grey,
     Colors.orange,
@@ -26,8 +28,8 @@ class ControllerConfigItems {
   Future<void> submitToFirebase(Color color, BuildContext context) async {
     try {
       final colourVal = color.value;
-      final id = DateTime.now().microsecondsSinceEpoch.toString();
-      final itemRef = FirebaseFirestore.instance.collection('Items').doc(id);
+
+      final itemRef = FirebaseFirestore.instance.collection('items').doc(id);
       final item = Item(
         id: DateTime.now().microsecondsSinceEpoch.toString(),
         name: inputName.text.trim(),
