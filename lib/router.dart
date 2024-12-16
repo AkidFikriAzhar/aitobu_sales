@@ -1,4 +1,5 @@
 import 'package:aitobu_sales/model/item.dart';
+import 'package:aitobu_sales/model/ticket.dart';
 import 'package:aitobu_sales/view/home.dart';
 import 'package:aitobu_sales/view/items/view_config_item.dart';
 import 'package:aitobu_sales/view/items/view_all_items.dart';
@@ -35,7 +36,7 @@ class MyRouter {
       ),
       GoRoute(
         path: checkOut,
-        builder: (context, state) => ViewCheckout(listItem: state.extra as List<Item>),
+        builder: (context, state) => ViewCheckout(listItem: state.extra as List<Ticket>),
       ),
     ],
   );

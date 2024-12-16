@@ -16,24 +16,34 @@ class ViewSales extends StatefulWidget {
 }
 
 class _ViewSalesState extends State<ViewSales> {
-  final controllerTicket = ControllerTicket();
-  final _itemQuery = FirebaseFirestore.instance
-      .collection('items')
-      .withConverter(
+  final _controllerTicket = ControllerTicket();
+  final _itemQuery = FirebaseFirestore.instance.collection('items').withConverter(
         fromFirestore: (snapshot, _) => Item.fromFirestore(snapshot.data()!),
         toFirestore: (item, _) => item.toFirestore(),
       );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: controllerTicket.ticket.isEmpty
+      floatingActionButton: _controllerTicket.ticket.isEmpty
           ? null
           : FloatingActionButton.extended(
-              onPressed: () {
-                context.push(MyRouter.checkOut, extra: controllerTicket.items);
+              onPressed: () async {
+                final bool? isPay = await context.push<bool>(MyRouter.checkOut, extra: _controllerTicket.ticket);
+
+                if (isPay == true) {
+                  await Future.delayed(const Duration(seconds: 1));
+                  setState(() {
+                    _controllerTicket.ticket = [];
+                  });
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Payment completed!'),
+                      duration: Duration(seconds: 1),
+                    ));
+                  }
+                }
               },
-              label: Text(
-                  'Charge RM${controllerTicket.amount().toStringAsFixed(2)}'),
+              label: Text('Charge RM${_controllerTicket.amount().toStringAsFixed(2)}'),
               icon: const Icon(Icons.shopping_bag),
             ),
       appBar: AppBar(
@@ -53,7 +63,7 @@ class _ViewSalesState extends State<ViewSales> {
                 PopupMenuItem(
                     onTap: () {
                       setState(() {
-                        controllerTicket.ticket = [];
+                        _controllerTicket.ticket = [];
                       });
                     },
                     child: const Row(
@@ -72,7 +82,7 @@ class _ViewSalesState extends State<ViewSales> {
           query: _itemQuery,
           itemBuilder: (context, snapshot) {
             final myItem = snapshot.data();
-            int itemNo = controllerTicket.ticket.where((e) {
+            int itemNo = _controllerTicket.ticket.where((e) {
               return e.item.id == myItem.id;
             }).length;
             return ListTile(
@@ -86,27 +96,27 @@ class _ViewSalesState extends State<ViewSales> {
               ),
               title: Text(myItem.name),
               subtitle: Text('RM${myItem.price.toStringAsFixed(2)}'),
-              trailing: itemNo <= 0
-                  ? const SizedBox()
-                  : Container(
-                      height: 25,
-                      width: 25,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          itemNo.toString(),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 13),
-                        ),
-                      ),
+              trailing: AnimatedContainer(
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.bounceInOut,
+                height: itemNo <= 0 ? 0 : 25,
+                width: itemNo <= 0 ? 0 : 25,
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: FittedBox(
+                    child: Text(
+                      itemNo.toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 13),
                     ),
+                  ),
+                ),
+              ),
               onTap: () {
                 setState(() {
-                  controllerTicket.ticket
-                      .add(Ticket(item: myItem, totalPrice: myItem.price));
+                  _controllerTicket.ticket.add(Ticket(item: myItem, totalPrice: myItem.price));
                 });
               },
             );
