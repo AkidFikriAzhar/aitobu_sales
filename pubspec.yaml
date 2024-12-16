@@ -26,6 +26,9 @@ dependencies:
   #State Management
   go_router: ^14.6.2
 
+  #Data Handlers
+  intl:
+
 
 dev_dependencies:
   flutter_test:

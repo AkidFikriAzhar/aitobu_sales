@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.light,
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.black.withOpacity(0.05),
+          fillColor: Colors.black.withValues(alpha: 0.05),
           contentPadding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),

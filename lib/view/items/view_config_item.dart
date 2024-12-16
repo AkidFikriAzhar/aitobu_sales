@@ -1,6 +1,7 @@
 import 'package:aitobu_sales/component/caption_title.dart';
 import 'package:aitobu_sales/controller/controller_config_items.dart';
 import 'package:aitobu_sales/model/item.dart';
+import 'package:aitobu_sales/controller/currency_formater.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,7 +23,7 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
     if (widget.currentItem != null) {
       _controllerAddItem.id = widget.currentItem!.id;
       _controllerAddItem.inputName.text = widget.currentItem!.name;
-      _controllerAddItem.inputPrice.text = widget.currentItem!.price.toString();
+      _controllerAddItem.inputPrice.text = widget.currentItem!.price.toStringAsFixed(2);
     }
     super.initState();
   }
@@ -39,9 +40,13 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    icon: Icon(widget.currentItem != null ? Icons.edit : Icons.save),
-                    title: Text(widget.currentItem != null ? 'Edit Product' : 'Save Product'),
-                    content: const Text('Make sure your product information are correct'),
+                    icon: Icon(
+                        widget.currentItem != null ? Icons.edit : Icons.save),
+                    title: Text(widget.currentItem != null
+                        ? 'Edit Product'
+                        : 'Save Product'),
+                    content: const Text(
+                        'Make sure your product information are correct'),
                     actions: [
                       TextButton(
                         onPressed: () {
@@ -61,10 +66,14 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
             if (context.mounted) {
               if (isSubmit == true) {
                 if (widget.currentItem != null) {
-                  await _controllerAddItem.editFirebase(widget.currentItem!.id, _controllerAddItem.posColor[_selectedColor].value);
+                  await _controllerAddItem.editFirebase(
+                      widget.currentItem!.id,
+                      // ignore: deprecated_member_use
+                      _controllerAddItem.posColor[_selectedColor].value);
                 }
                 if (context.mounted) {
-                  await _controllerAddItem.submitToFirebase(_controllerAddItem.posColor[_selectedColor], context);
+                  await _controllerAddItem.submitToFirebase(
+                      _controllerAddItem.posColor[_selectedColor], context);
                 }
               }
             }
@@ -75,7 +84,9 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
         icon: Icon(widget.currentItem != null ? Icons.edit : Icons.save),
       ),
       appBar: AppBar(
-        title: widget.currentItem != null ? const Text('Edit Items') : const Text('Add Items'),
+        title: widget.currentItem != null
+            ? const Text('Edit Items')
+            : const Text('Add Items'),
         actions: [
           widget.currentItem == null
               ? const SizedBox()
@@ -87,16 +98,22 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
                           return AlertDialog(
                             icon: const Icon(Icons.delete),
                             title: Text('Delete ${widget.currentItem!.name}?'),
-                            content: const Text('Are you sure to delete this item?'),
+                            content:
+                                const Text('Are you sure to delete this item?'),
                             actions: [
-                              TextButton(onPressed: () => context.pop(false), child: const Text('Cancel')),
-                              FilledButton(onPressed: () => context.pop(true), child: const Text('Delete')),
+                              TextButton(
+                                  onPressed: () => context.pop(false),
+                                  child: const Text('Cancel')),
+                              FilledButton(
+                                  onPressed: () => context.pop(true),
+                                  child: const Text('Delete')),
                             ],
                           );
                         });
 
                     if (isConfirm == true) {
-                      await _controllerAddItem.deleteFirebase(widget.currentItem!.id);
+                      await _controllerAddItem
+                          .deleteFirebase(widget.currentItem!.id);
                       if (context.mounted) {
                         context.pop();
                       }
@@ -131,7 +148,8 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
                   }
                   return null;
                 },
-                decoration: const InputDecoration(labelText: 'Name', hintText: 'Tobu'),
+                decoration:
+                    const InputDecoration(labelText: 'Name', hintText: 'Tobu'),
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -139,13 +157,17 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
                 focusNode: _controllerAddItem.priceFocus,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.done,
+                inputFormatters: [
+                  CurrencyInputFormatter(),
+                ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter product price!';
                   }
                   return null;
                 },
-                decoration: const InputDecoration(labelText: 'Price (RM)', hintText: '10'),
+                decoration: const InputDecoration(
+                    labelText: 'Price (RM)', hintText: '10'),
               ),
               const SizedBox(height: 30),
               const Align(
@@ -158,7 +180,8 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
                 alignment: WrapAlignment.center,
                 spacing: 10,
                 runSpacing: 10,
-                children: List.generate(_controllerAddItem.posColor.length, (index) {
+                children:
+                    List.generate(_controllerAddItem.posColor.length, (index) {
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -169,10 +192,16 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
                       height: 80,
                       width: 80,
                       decoration: BoxDecoration(
-                          color: _selectedColor == index ? _controllerAddItem.posColor[index].withAlpha(-100) : _controllerAddItem.posColor[index],
-                          borderRadius: BorderRadius.circular(_selectedColor == index ? 15 : 0)),
+                          color: _selectedColor == index
+                              ? _controllerAddItem.posColor[index]
+                                  .withAlpha(-100)
+                              : _controllerAddItem.posColor[index],
+                          borderRadius: BorderRadius.circular(
+                              _selectedColor == index ? 15 : 0)),
                       duration: const Duration(milliseconds: 200),
-                      child: _selectedColor == index ? const Icon(Icons.done) : const SizedBox(),
+                      child: _selectedColor == index
+                          ? const Icon(Icons.done)
+                          : const SizedBox(),
                     ),
                   );
                 }),
