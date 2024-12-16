@@ -134,6 +134,7 @@ class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMix
                   elevation: 15,
                   child: ListView.builder(
                       itemCount: widget.listItem.length,
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, i) {
                         final item = widget.listItem[i].item;
