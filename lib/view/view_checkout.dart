@@ -114,6 +114,7 @@ class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMix
               TextFormField(
                 controller: _controllerCheckout.inputCashReceived,
                 textAlign: TextAlign.center,
+                keyboardType: const TextInputType.numberWithOptions(),
                 onChanged: (value) {
                   setState(() {});
                 },
