@@ -25,7 +25,7 @@ class Item {
     return Item(
       id: doc['id'],
       name: doc['name'],
-      price: doc['price'],
+      price: double.parse(doc['price'].toString()),
       cost: doc['cost'],
       stock: doc['stock'],
       imgUrl: doc['imgUrl'],

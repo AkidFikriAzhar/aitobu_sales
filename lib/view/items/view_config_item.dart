@@ -60,7 +60,12 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
                 });
             if (context.mounted) {
               if (isSubmit == true) {
-                await _controllerAddItem.submitToFirebase(_controllerAddItem.posColor[_selectedColor], context);
+                if (widget.currentItem != null) {
+                  await _controllerAddItem.editFirebase(widget.currentItem!.id, _controllerAddItem.posColor[_selectedColor].value);
+                }
+                if (context.mounted) {
+                  await _controllerAddItem.submitToFirebase(_controllerAddItem.posColor[_selectedColor], context);
+                }
               }
             }
           }
@@ -75,7 +80,28 @@ class _ViewConfigItemState extends State<ViewConfigItem> {
           widget.currentItem == null
               ? const SizedBox()
               : IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final bool? isConfirm = await showDialog<bool>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            icon: const Icon(Icons.delete),
+                            title: Text('Delete ${widget.currentItem!.name}?'),
+                            content: const Text('Are you sure to delete this item?'),
+                            actions: [
+                              TextButton(onPressed: () => context.pop(false), child: const Text('Cancel')),
+                              FilledButton(onPressed: () => context.pop(true), child: const Text('Delete')),
+                            ],
+                          );
+                        });
+
+                    if (isConfirm == true) {
+                      await _controllerAddItem.deleteFirebase(widget.currentItem!.id);
+                      if (context.mounted) {
+                        context.pop();
+                      }
+                    }
+                  },
                   icon: const Icon(Icons.delete),
                 )
         ],

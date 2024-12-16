@@ -25,13 +25,29 @@ class ControllerConfigItems {
     Colors.lime,
   ];
 
+  Future<void> deleteFirebase(String id) async {
+    final itemRef = FirebaseFirestore.instance.collection('items').doc(id);
+
+    await itemRef.delete();
+  }
+
+  Future<void> editFirebase(String id, int colorVal) async {
+    final itemRef = FirebaseFirestore.instance.collection('items').doc(id);
+
+    itemRef.update({
+      'name': inputName.text,
+      'price': double.parse(inputPrice.text),
+      'color': colorVal,
+    });
+  }
+
   Future<void> submitToFirebase(Color color, BuildContext context) async {
     try {
       final colourVal = color.value;
 
       final itemRef = FirebaseFirestore.instance.collection('items').doc(id);
       final item = Item(
-        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        id: id,
         name: inputName.text.trim(),
         price: double.parse(inputPrice.text),
         cost: null,
