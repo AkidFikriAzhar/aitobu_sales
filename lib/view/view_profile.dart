@@ -36,14 +36,16 @@ class ViewProfile extends StatelessWidget {
               subtitle: const Text('Manage all of your items product'),
               leading: const Icon(Icons.inventory),
               onTap: () {
-                context.push(MyRouter.items);
+                context.go(MyRouter.items);
               },
             ),
             ListTile(
               title: const Text('Cups'),
               subtitle: const Text('Manage cups'),
               leading: const Icon(Icons.local_drink),
-              onTap: () {},
+              onTap: () {
+                context.go(MyRouter.cup);
+              },
             ),
             const SizedBox(height: 10),
             const CaptionTitle(title: 'Settings'),

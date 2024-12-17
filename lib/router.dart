@@ -5,6 +5,7 @@ import 'package:aitobu_sales/view/home.dart';
 import 'package:aitobu_sales/view/items/view_config_item.dart';
 import 'package:aitobu_sales/view/items/view_all_items.dart';
 import 'package:aitobu_sales/view/view_checkout.dart';
+import 'package:aitobu_sales/view/view_cup.dart';
 import 'package:aitobu_sales/view/view_login.dart';
 import 'package:aitobu_sales/view/view_receipt_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,20 +18,28 @@ class MyRouter {
   static const configItems = '/config';
   static const checkOut = '/checkout';
   static const receiptDetails = '/details';
+  static const cup = '/cup';
+
   final router = GoRouter(
     initialLocation: FirebaseAuth.instance.currentUser == null ? login : home,
     routes: [
       GoRoute(
         path: home,
         builder: (context, state) => const Home(),
+        routes: [
+          GoRoute(
+            path: items,
+            builder: (context, state) => ViewAllItems(),
+          ),
+          GoRoute(
+            path: cup,
+            builder: (context, state) => const ViewCup(),
+          ),
+        ],
       ),
       GoRoute(
         path: login,
         builder: (context, state) => const ViewLogin(),
-      ),
-      GoRoute(
-        path: items,
-        builder: (context, state) => ViewAllItems(),
       ),
       GoRoute(
         path: configItems,
