@@ -1,10 +1,12 @@
 import 'package:aitobu_sales/model/item.dart';
+import 'package:aitobu_sales/model/receipt.dart';
 import 'package:aitobu_sales/model/ticket.dart';
 import 'package:aitobu_sales/view/home.dart';
 import 'package:aitobu_sales/view/items/view_config_item.dart';
 import 'package:aitobu_sales/view/items/view_all_items.dart';
 import 'package:aitobu_sales/view/view_checkout.dart';
 import 'package:aitobu_sales/view/view_login.dart';
+import 'package:aitobu_sales/view/view_receipt_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,7 +16,7 @@ class MyRouter {
   static const items = '/item';
   static const configItems = '/config';
   static const checkOut = '/checkout';
-
+  static const receiptDetails = '/details';
   final router = GoRouter(
     initialLocation: FirebaseAuth.instance.currentUser == null ? login : home,
     routes: [
@@ -37,6 +39,10 @@ class MyRouter {
       GoRoute(
         path: checkOut,
         builder: (context, state) => ViewCheckout(listItem: state.extra as List<Ticket>),
+      ),
+      GoRoute(
+        path: receiptDetails,
+        builder: (context, state) => ViewReceiptDetails(receipt: state.extra as Receipt),
       ),
     ],
   );

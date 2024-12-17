@@ -40,9 +40,9 @@ class ViewProfile extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text('Sections'),
-              subtitle: const Text('Products category (eg: Foods, Drinks..)'),
-              leading: const Icon(Icons.category),
+              title: const Text('Cups'),
+              subtitle: const Text('Manage cups'),
+              leading: const Icon(Icons.local_drink),
               onTap: () {},
             ),
             const SizedBox(height: 10),

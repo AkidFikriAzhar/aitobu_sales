@@ -29,6 +29,8 @@ dependencies:
 
   #Data Handlers
   intl:
+  grouped_list: ^6.0.0
+  jiffy: ^6.3.2
 
 
 dev_dependencies:

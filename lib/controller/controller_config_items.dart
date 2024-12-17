@@ -48,16 +48,7 @@ class ControllerConfigItems {
       final colourVal = color.value;
 
       final itemRef = FirebaseFirestore.instance.collection('items').doc(id);
-      final item = Item(
-        id: id,
-        name: inputName.text.trim(),
-        price: double.parse(inputPrice.text),
-        cost: null,
-        stock: null,
-        imgUrl: null,
-        colors: colourVal,
-        category: null,
-      );
+      final item = Item(id: id, name: inputName.text.trim(), price: double.parse(inputPrice.text), cost: null, stock: null, imgUrl: null, colors: colourVal, category: null, totalSold: 0);
 
       await itemRef.set(item.toFirestore());
 

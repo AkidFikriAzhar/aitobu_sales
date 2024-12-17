@@ -6,6 +6,7 @@ class Item {
   final double price;
   final double? cost;
   final int? stock;
+  final int totalSold;
   final String? imgUrl;
   final int colors;
   final Section? category;
@@ -18,6 +19,7 @@ class Item {
     required this.stock,
     required this.imgUrl,
     required this.colors,
+    required this.totalSold,
     required this.category,
   });
 
@@ -30,6 +32,7 @@ class Item {
       stock: doc['stock'],
       imgUrl: doc['imgUrl'],
       colors: doc['color'],
+      totalSold: doc['totalSold'],
       category: doc['category'],
     );
   }
@@ -44,6 +47,7 @@ class Item {
       'imgUrl': imgUrl,
       'color': colors,
       'category': category,
+      'totalSold': totalSold,
     };
   }
 }

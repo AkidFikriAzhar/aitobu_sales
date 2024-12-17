@@ -16,27 +16,11 @@ class ViewCheckout extends StatefulWidget {
 class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMixin {
   @override
   void initState() {
-    _controllerCheckout.inputCashReceived.text = totalPrice().toStringAsFixed(2);
+    _controllerCheckout.inputCashReceived.text = _controllerCheckout.totalPrice(widget.listItem).toStringAsFixed(2);
     super.initState();
   }
 
   final _controllerCheckout = ControllerCheckout();
-  double totalPrice() {
-    double result = 0;
-    for (var total in widget.listItem) {
-      result += total.item.price;
-    }
-
-    return result;
-  }
-
-  double totalChange() {
-    double result = 0;
-    double cashReceived = double.parse(_controllerCheckout.inputCashReceived.text);
-    double totalSales = totalPrice();
-    result = cashReceived - totalSales;
-    return result;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +55,10 @@ class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMix
                               children: [
                                 TextButton.icon(
                                   onPressed: () {
+                                    _controllerCheckout.isCash = false;
                                     context.pop();
                                     context.pop(true);
+                                    _controllerCheckout.submitData(widget.listItem);
                                   },
                                   label: const Text('QR Payment'),
                                   icon: const Icon(Icons.qr_code),
@@ -80,8 +66,10 @@ class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMix
                                 const SizedBox(width: 30),
                                 FilledButton.icon(
                                   onPressed: () {
+                                    _controllerCheckout.isCash = true;
                                     context.pop();
                                     context.pop(true);
+                                    _controllerCheckout.submitData(widget.listItem);
                                   },
                                   label: const Text('Cash'),
                                   icon: const Icon(Icons.payments),
@@ -121,7 +109,7 @@ class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMix
                 inputFormatters: [
                   CurrencyInputFormatter(),
                 ],
-                decoration: const InputDecoration(labelText: 'Cash Received'),
+                // decoration: const InputDecoration(labelText: 'Cash Received'),
               ),
               const SizedBox(height: 20),
               const Align(
@@ -146,6 +134,14 @@ class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMix
                           ),
                           title: Text(item.name),
                           subtitle: Text('RM ${item.price.toStringAsFixed(2)}'),
+                          trailing: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  widget.listItem.removeAt(i);
+                                  _controllerCheckout.inputCashReceived.text = _controllerCheckout.totalPrice(widget.listItem).toStringAsFixed(2);
+                                });
+                              },
+                              icon: const Icon(Icons.delete)),
                         );
                       }),
                 ),
@@ -172,7 +168,7 @@ class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMix
                             style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 18),
                           ),
                           Text(
-                            'RM ${totalPrice().toStringAsFixed(2)}',
+                            'RM ${_controllerCheckout.totalPrice(widget.listItem).toStringAsFixed(2)}',
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontSize: 25,
@@ -189,7 +185,7 @@ class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMix
                             style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 18),
                           ),
                           Text(
-                            totalChange() <= 0 ? '--' : 'RM ${totalChange().toStringAsFixed(2)}',
+                            _controllerCheckout.totalChange(widget.listItem) <= 0 ? '--' : 'RM ${_controllerCheckout.totalChange(widget.listItem).toStringAsFixed(2)}',
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontSize: 25,
