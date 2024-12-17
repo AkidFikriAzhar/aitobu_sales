@@ -31,9 +31,10 @@ class ControllerCheckout {
     final int year = DateTime.now().year % 100;
     const String branch = '01';
     int currentID = 0;
-    final receiptRef = await FirebaseFirestore.instance.collection('receipt').get();
+    final receiptCount = await FirebaseFirestore.instance.collection('dashboard').doc('global').get();
 
-    currentID = receiptRef.docs.length;
+    currentID = int.parse(receiptCount.data()!['totalReceipt'].toString()) + 1;
+
     result = '#$year$branch${currentID.toString().padLeft(2, '0')}';
     return result;
   }
@@ -46,6 +47,7 @@ class ControllerCheckout {
       itemId.add(getId.item.id);
     }
     final receiptRef = FirebaseFirestore.instance.collection('receipt').doc(currentRunningNum);
+    final dashboardRef = FirebaseFirestore.instance.collection('dashboard').doc('global');
     final Receipt receipt = Receipt(
       user: userAcc!.email.toString(),
       runningNum: currentRunningNum,
@@ -57,5 +59,9 @@ class ControllerCheckout {
       isReturn: false,
     );
     await receiptRef.set(receipt.toFirestore());
+    dashboardRef.update({
+      'totalCup': FieldValue.increment(-listItem.length),
+      'totalReceipt': FieldValue.increment(1),
+    });
   }
 }

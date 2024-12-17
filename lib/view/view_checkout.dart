@@ -134,14 +134,16 @@ class _ViewCheckoutState extends State<ViewCheckout> with TickerProviderStateMix
                           ),
                           title: Text(item.name),
                           subtitle: Text('RM ${item.price.toStringAsFixed(2)}'),
-                          trailing: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  widget.listItem.removeAt(i);
-                                  _controllerCheckout.inputCashReceived.text = _controllerCheckout.totalPrice(widget.listItem).toStringAsFixed(2);
-                                });
-                              },
-                              icon: const Icon(Icons.delete)),
+                          trailing: widget.listItem.length > 1
+                              ? IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      widget.listItem.removeAt(i);
+                                      _controllerCheckout.inputCashReceived.text = _controllerCheckout.totalPrice(widget.listItem).toStringAsFixed(2);
+                                    });
+                                  },
+                                  icon: const Icon(Icons.delete))
+                              : const SizedBox(),
                         );
                       }),
                 ),

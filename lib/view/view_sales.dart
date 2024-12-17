@@ -42,6 +42,7 @@ class _ViewSalesState extends State<ViewSales> {
                     ));
                   }
                 }
+                setState(() {});
               },
               label: Text('Charge RM${_controllerTicket.amount().toStringAsFixed(2)}'),
               icon: const Icon(Icons.shopping_bag),

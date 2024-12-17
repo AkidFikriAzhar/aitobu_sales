@@ -39,4 +39,10 @@ class ControllerReceiptDetails {
 
     groupedItems.toSet().toList();
   }
+
+  Future<void> deleteReceipt(String id) async {
+    final receiptRef = FirebaseFirestore.instance.collection('receipt').doc(id);
+
+    await receiptRef.delete();
+  }
 }

@@ -3,6 +3,7 @@ import 'package:aitobu_sales/controller/controller_receipt_details.dart';
 import 'package:aitobu_sales/controller/order_item.dart';
 import 'package:aitobu_sales/model/item.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jiffy/jiffy.dart';
 
 import '../model/receipt.dart';
@@ -30,6 +31,48 @@ class _ViewReceiptDetailsState extends State<ViewReceiptDetails> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Receipt details'),
+        actions: [
+          PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    child: const Row(
+                      children: [
+                        Icon(Icons.delete),
+                        SizedBox(width: 10),
+                        Text('Delete'),
+                      ],
+                    ),
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              icon: const Icon(Icons.delete),
+                              title: const Text('Delete Receipt'),
+                              content: const Text('Are you sure want to delete this receipt?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => context.pop(),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    context.pop();
+                                    context.pop();
+                                    await _controllerReceiptDetails.deleteReceipt(widget.receipt.runningNum);
+                                  },
+                                  child: const Text('Delete'),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                  ),
+                ];
+              })
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -129,6 +172,7 @@ class _ViewReceiptDetailsState extends State<ViewReceiptDetails> {
                         children: [
                           ListView.builder(
                               itemCount: _controllerReceiptDetails.groupedItems.length,
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, i) {
                                 final OrderItem item = _controllerReceiptDetails.groupedItems[i];
@@ -155,7 +199,7 @@ class _ViewReceiptDetailsState extends State<ViewReceiptDetails> {
                             ),
                           ),
                           ListTile(
-                            title: const Text('Cash'),
+                            title: const Text('Payment Received'),
                             trailing: Text(
                               'RM ${widget.receipt.cashReceived.toStringAsFixed(2)}',
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
