@@ -74,7 +74,9 @@ class ViewReceipt extends StatelessWidget {
                       CaptionTitle(title: Jiffy.parseFromDateTime(dateTime).format(pattern: 'EEEE, d MMMM y')),
                       IconButton(
                         tooltip: 'Sales report',
-                        onPressed: () {},
+                        onPressed: () {
+                          context.go(MyRouter.report, extra: dateTime);
+                        },
                         icon: const Icon(Icons.analytics),
                       ),
                     ],

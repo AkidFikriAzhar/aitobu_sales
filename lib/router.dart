@@ -1,6 +1,7 @@
 import 'package:aitobu_sales/model/item.dart';
 import 'package:aitobu_sales/model/receipt.dart';
 import 'package:aitobu_sales/model/ticket.dart';
+import 'package:aitobu_sales/view/dashboard/view_daily_dashboard.dart';
 import 'package:aitobu_sales/view/home.dart';
 import 'package:aitobu_sales/view/items/view_config_item.dart';
 import 'package:aitobu_sales/view/items/view_all_items.dart';
@@ -19,6 +20,7 @@ class MyRouter {
   static const checkOut = '/checkout';
   static const receiptDetails = '/details';
   static const cup = '/cup';
+  static const report = '/report';
 
   final router = GoRouter(
     initialLocation: FirebaseAuth.instance.currentUser == null ? login : home,
@@ -35,23 +37,27 @@ class MyRouter {
             path: cup,
             builder: (context, state) => ViewCup(),
           ),
+          GoRoute(
+            path: configItems,
+            builder: (context, state) => ViewConfigItem(currentItem: state.extra as Item?),
+          ),
+          GoRoute(
+            path: checkOut,
+            builder: (context, state) => ViewCheckout(listItem: state.extra as List<Ticket>),
+          ),
+          GoRoute(
+            path: receiptDetails,
+            builder: (context, state) => ViewReceiptDetails(receipt: state.extra as Receipt),
+          ),
+          GoRoute(
+            path: report,
+            builder: (context, state) => ViewDailyDashboard(currentDate: state.extra as DateTime),
+          ),
         ],
       ),
       GoRoute(
         path: login,
         builder: (context, state) => const ViewLogin(),
-      ),
-      GoRoute(
-        path: configItems,
-        builder: (context, state) => ViewConfigItem(currentItem: state.extra as Item?),
-      ),
-      GoRoute(
-        path: checkOut,
-        builder: (context, state) => ViewCheckout(listItem: state.extra as List<Ticket>),
-      ),
-      GoRoute(
-        path: receiptDetails,
-        builder: (context, state) => ViewReceiptDetails(receipt: state.extra as Receipt),
       ),
     ],
   );
