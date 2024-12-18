@@ -33,7 +33,7 @@ class MyRouter {
           ),
           GoRoute(
             path: cup,
-            builder: (context, state) => const ViewCup(),
+            builder: (context, state) => ViewCup(),
           ),
         ],
       ),

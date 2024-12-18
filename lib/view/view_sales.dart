@@ -1,4 +1,6 @@
+import 'package:aitobu_sales/controller/controller_cup_management.dart';
 import 'package:aitobu_sales/controller/controller_ticket.dart';
+import 'package:aitobu_sales/model/data.dart';
 import 'package:aitobu_sales/model/ticket.dart';
 import 'package:aitobu_sales/router.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,11 +18,21 @@ class ViewSales extends StatefulWidget {
 }
 
 class _ViewSalesState extends State<ViewSales> {
+  @override
+  void initState() {
+    _cupQuery = FirebaseFirestore.instance.collection('dashboard').doc('global').snapshots();
+    super.initState();
+  }
+
   final _controllerTicket = ControllerTicket();
+  final _controllerCup = ControllerCupManagement();
+
   final _itemQuery = FirebaseFirestore.instance.collection('items').withConverter(
         fromFirestore: (snapshot, _) => Item.fromFirestore(snapshot.data()!),
         toFirestore: (item, _) => item.toFirestore(),
       );
+  late Stream _cupQuery;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,13 +61,35 @@ class _ViewSalesState extends State<ViewSales> {
             ),
       appBar: AppBar(
         title: const Text('Sales'),
-        leading: TextButton(
-          onPressed: () {},
-          child: const Text(
-            '10',
-            style: TextStyle(fontSize: 17),
-          ),
-        ),
+        leading: StreamBuilder(
+            stream: _cupQuery,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return TextButton(
+                  onPressed: () {},
+                  child: const SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                );
+              }
+              final Data data = Data.fromFirestore(snapshot.data);
+              return Tooltip(
+                message: 'Total Cup',
+                child: TextButton(
+                  onPressed: () {
+                    _controllerCup.addCupDialog(context);
+                  },
+                  child: FittedBox(
+                    child: Text(
+                      data.totalCup.toString(),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: _controllerCup.colorCup(data.totalCup)),
+                    ),
+                  ),
+                ),
+              );
+            }),
         actions: [
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),

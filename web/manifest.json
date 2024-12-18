@@ -3,7 +3,7 @@
     "short_name": "Aitobu POS",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#hexcode",
+    "background_color": "#183924",
     "theme_color": "#hexcode",
     "description": "Manage POS system",
     "orientation": "portrait-primary",
