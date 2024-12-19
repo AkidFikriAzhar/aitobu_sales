@@ -5,16 +5,16 @@ import 'package:go_router/go_router.dart';
 class ControllerCupManagement {
   final inputAddCup = TextEditingController();
 
-  Color colorCup(int totalCup) {
+  Color colorCup(int totalCup, BuildContext context) {
     switch (totalCup) {
       case <= 200:
-        return Colors.orange.shade700;
+        return Colors.amber.shade800;
 
       case <= 100:
         return Colors.red;
 
       default:
-        return Colors.green;
+        return Theme.of(context).colorScheme.primary;
     }
   }
 

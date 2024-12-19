@@ -43,65 +43,128 @@ class _ViewDailyDashboardState extends State<ViewDailyDashboard> {
               }
 
               return Center(
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    children: [
-                      cardReport(
-                        title: 'Total Sales',
-                        icon: Icons.wallet,
-                        content: 'RM ${_controller.totalSales.toStringAsFixed(2)}',
-                        subtitle: 'Total revenue generate',
-                      ),
-                      cardReport(
-                        title: 'Product Sold',
-                        icon: Icons.local_drink_outlined,
-                        content: '${_controller.productSold}',
-                        subtitle: 'Total unit sold',
-                      ),
-                      cardReport(
-                        title: 'Receipt Open',
-                        icon: Icons.receipt,
-                        content: '${_controller.receiptOpen}',
-                        subtitle: 'Total todays transaction',
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Card(
-                          elevation: 10,
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: SizedBox(
-                              width: 250,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text('Product breakdown', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                                  const Text(
-                                    'Complete breakdown of product sold',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  ListView.builder(
-                                      itemCount: _controller.breakdownProductName.length,
-                                      shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, i) {
-                                        final breakDown = _controller.breakdownProductName[i];
-                                        return ListTile(
-                                          title: Text(breakDown.item),
-                                          subtitle: LinearProgressIndicator(
-                                            value: 0.5,
-                                          ),
-                                          trailing: Text('${breakDown.quantity.toString()} units'),
-                                        );
-                                      })
-                                ],
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await _controller.getDailyReport(widget.currentDate);
+                  },
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      width: 900,
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        runAlignment: WrapAlignment.center,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              cardReport(
+                                title: 'Total Sales',
+                                icon: Icons.wallet,
+                                content: 'RM ${_controller.totalSales.toStringAsFixed(2)}',
+                                subtitle: 'Total revenue generate',
                               ),
-                            ),
+                              cardReport(
+                                title: 'Product Sold',
+                                icon: Icons.local_drink_outlined,
+                                content: '${_controller.productSold}',
+                                subtitle: 'Total unit sold',
+                              ),
+                              cardReport(
+                                title: 'Receipt Open',
+                                icon: Icons.receipt,
+                                content: '${_controller.receiptOpen}',
+                                subtitle: 'Total todays transaction',
+                              ),
+                            ],
                           ),
-                        ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Card(
+                                  elevation: 10,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text('Payment Methods', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                          const Text(
+                                            'Revenue by payment type',
+                                            style: TextStyle(color: Colors.grey),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          ListTile(
+                                            leading: const CircleAvatar(child: Icon(Icons.payments)),
+                                            title: Text('${_controller.totalCashPayment} Cash'),
+                                            trailing: Text(
+                                              'RM ${_controller.cashPayment.toStringAsFixed(2)}',
+                                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                                            ),
+                                            subtitle: Text('${_controller.percentCash().toStringAsFixed(0)}% of sales'),
+                                          ),
+                                          ListTile(
+                                            leading: const CircleAvatar(child: Icon(Icons.qr_code)),
+                                            title: Text('${_controller.totalQrPayment} Qr Payment'),
+                                            trailing: Text(
+                                              'RM ${_controller.qrPayment.toStringAsFixed(2)}',
+                                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                                            ),
+                                            subtitle: Text('${_controller.percentQr().toStringAsFixed(0)}% of sales'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Card(
+                                  elevation: 10,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text('Product breakdown', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                          const Text(
+                                            'Detail breakdown of product sold',
+                                            style: TextStyle(color: Colors.grey),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          ListView.builder(
+                                              itemCount: _controller.breakdownProductName.length,
+                                              shrinkWrap: true,
+                                              physics: const NeverScrollableScrollPhysics(),
+                                              itemBuilder: (context, i) {
+                                                final breakDown = _controller.breakdownProductName[i];
+                                                return ListTile(
+                                                  title: Text(breakDown.item),
+                                                  subtitle: LinearProgressIndicator(
+                                                    value: _controller.getBreakdownUnit(_controller.productSold, breakDown.quantity),
+                                                  ),
+                                                  trailing: Text('${breakDown.quantity.toString()} units'),
+                                                );
+                                              })
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               );

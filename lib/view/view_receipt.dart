@@ -32,9 +32,7 @@ class ViewReceipt extends StatelessWidget {
                     ],
                   ),
                 );
-              }
-
-              if (snapshot.data!.docs.isEmpty) {
+              } else if (snapshot.data!.docs.isEmpty) {
                 return const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -75,7 +73,7 @@ class ViewReceipt extends StatelessWidget {
                       IconButton(
                         tooltip: 'Sales report',
                         onPressed: () {
-                          context.go(MyRouter.report, extra: dateTime);
+                          context.push(MyRouter.report, extra: dateTime);
                         },
                         icon: const Icon(Icons.analytics),
                       ),

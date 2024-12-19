@@ -84,7 +84,7 @@ class _ViewSalesState extends State<ViewSales> {
                   child: FittedBox(
                     child: Text(
                       data.totalCup.toString(),
-                      style: TextStyle(fontSize: 17, color: _controllerCup.colorCup(data.totalCup)),
+                      style: TextStyle(fontSize: 17, color: _controllerCup.colorCup(data.totalCup, context)),
                     ),
                   ),
                 ),
