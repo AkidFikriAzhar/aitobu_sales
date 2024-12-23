@@ -1,3 +1,4 @@
+import 'package:aitobu_sales/controller/controller_sales_report.dart';
 import 'package:aitobu_sales/model/item.dart';
 import 'package:aitobu_sales/model/receipt.dart';
 import 'package:aitobu_sales/model/ticket.dart';
@@ -8,6 +9,7 @@ import 'package:aitobu_sales/view/items/view_all_items.dart';
 import 'package:aitobu_sales/view/view_checkout.dart';
 import 'package:aitobu_sales/view/view_cup.dart';
 import 'package:aitobu_sales/view/view_login.dart';
+import 'package:aitobu_sales/view/view_pdf_sales.dart';
 import 'package:aitobu_sales/view/view_receipt_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +23,7 @@ class MyRouter {
   static const receiptDetails = '/details';
   static const cup = '/cup';
   static const report = '/report';
+  static const pdfDailySales = '/pdf_daily';
 
   final router = GoRouter(
     initialLocation: FirebaseAuth.instance.currentUser == null ? login : home,
@@ -58,6 +61,10 @@ class MyRouter {
       GoRoute(
         path: login,
         builder: (context, state) => const ViewLogin(),
+      ),
+      GoRoute(
+        path: pdfDailySales,
+        builder: (context, state) => ViewPdfSales(controller: state.extra as ControllerSalesReport),
       ),
     ],
   );

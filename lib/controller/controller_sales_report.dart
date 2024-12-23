@@ -1,7 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:aitobu_sales/controller/order_item.dart';
 import 'package:aitobu_sales/model/item.dart';
 import 'package:aitobu_sales/model/receipt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class ControllerSalesReport {
   double totalSales = 0;
@@ -11,6 +16,7 @@ class ControllerSalesReport {
   double qrPayment = 0;
   int totalCashPayment = 0;
   int totalQrPayment = 0;
+  DateTime currentTime = DateTime.now();
   List<OrderItem> breakdownProductName = [];
   List<Receipt> receiptList = [];
   List<Receipt> dailyReceipt = [];
@@ -30,6 +36,7 @@ class ControllerSalesReport {
 
   Future<void> getDailyReport(DateTime currentDate) async {
     final firestore = FirebaseFirestore.instance;
+    currentTime = currentDate;
     final receiptRef = await firestore.collectionGroup('receipt').get();
 
     receiptList = receiptRef.docs.map((e) {
@@ -81,5 +88,129 @@ class ControllerSalesReport {
       qrPayment += qr.totalPrice;
     }
     totalQrPayment = qrPay.length;
+  }
+
+  Future<Uint8List> generatePdf() async {
+    final pdf = pw.Document();
+    final date = Jiffy.parseFromDateTime(currentTime).format(pattern: 'EEEE, d MMMM y');
+
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) => [
+          pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Center(
+                child: pw.Text(
+                  'Aitobu Sales Report',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 18),
+                ),
+              ),
+              pw.Center(child: pw.Text(date)),
+              pw.SizedBox(height: 50),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                width: double.infinity,
+                decoration: const pw.BoxDecoration(
+                  color: PdfColors.green200,
+                ),
+                child: pw.Text('Key Metrics'),
+              ),
+              pw.SizedBox(height: 10),
+              pw.RichText(
+                text: pw.TextSpan(text: 'Total Sales: ', children: [
+                  pw.TextSpan(
+                    text: 'RM ${totalSales.toStringAsFixed(2)}',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
+                ]),
+              ),
+              pw.SizedBox(height: 5),
+              pw.RichText(
+                text: pw.TextSpan(text: 'Product Sold: ', children: [
+                  pw.TextSpan(
+                    text: '$productSold units',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
+                ]),
+              ),
+              pw.SizedBox(height: 5),
+              pw.RichText(
+                text: pw.TextSpan(text: 'Receipt Open: ', children: [
+                  pw.TextSpan(
+                    text: '$receiptOpen transactions',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
+                ]),
+              ),
+              pw.SizedBox(height: 30),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                width: double.infinity,
+                decoration: const pw.BoxDecoration(
+                  color: PdfColors.green200,
+                ),
+                child: pw.Text('Payment Methods'),
+              ),
+              pw.SizedBox(height: 10),
+              pw.RichText(
+                text: pw.TextSpan(text: 'Cash: ', children: [
+                  pw.TextSpan(
+                    text: '$totalCashPayment payments - RM ${cashPayment.toStringAsFixed(2)} (${percentCash().toStringAsFixed(2)}%)',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
+                ]),
+              ),
+              pw.SizedBox(height: 5),
+              pw.RichText(
+                text: pw.TextSpan(text: 'QR Payment: ', children: [
+                  pw.TextSpan(
+                    text: '$totalQrPayment payments - RM ${qrPayment.toStringAsFixed(2)} (${percentQr().toStringAsFixed(2)}%)',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
+                ]),
+              ),
+              pw.SizedBox(height: 30),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                width: double.infinity,
+                decoration: const pw.BoxDecoration(
+                  color: PdfColors.green200,
+                ),
+                child: pw.Text('Product Breakdown'),
+              ),
+              pw.SizedBox(height: 10),
+              for (var item in breakdownProductName)
+                pw.Column(
+                  children: [
+                    pw.RichText(
+                      text: pw.TextSpan(text: '${item.item}: ', children: [
+                        pw.TextSpan(
+                          text: '${item.quantity} units (${getBreakdownUnit(productSold, item.quantity).toStringAsFixed(2)}% of total sales)',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
+                      ]),
+                    ),
+                    pw.SizedBox(height: 5),
+                  ],
+                ),
+
+              // ignore: deprecated_member_use
+              // pw.Table.fromTextArray(
+              //   context: context,
+              //   cellAlignment: pw.Alignment.centerLeft,
+              //   border: pw.TableBorder.all(color: PdfColors.white),
+              //   data: <List<String>>[
+              //     <String>['Product Name', 'Unit Sold'],
+              //     ...breakdownProductName.map((e) => [e.item, e.quantity.toString()]),
+              //   ],
+              // ),
+            ],
+          ),
+        ],
+      ),
+    );
+    return await pdf.save();
   }
 }
