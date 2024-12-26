@@ -93,6 +93,10 @@ class ControllerSalesReport {
   Future<Uint8List> generatePdf() async {
     final pdf = pw.Document();
     final date = Jiffy.parseFromDateTime(currentTime).format(pattern: 'EEEE, d MMMM y');
+    final int findHighProduct = breakdownProductName.fold(0, (prev, e) => e.quantity > prev ? e.quantity : prev);
+    final highProduct = breakdownProductName.where((e) => e.quantity == findHighProduct).toList();
+
+    String paymentMethod = percentCash() > percentQr() ? 'cash transactions' : 'QR payments';
 
     pdf.addPage(
       pw.MultiPage(
@@ -109,6 +113,18 @@ class ControllerSalesReport {
               ),
               pw.Center(child: pw.Text(date)),
               pw.SizedBox(height: 50),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                width: double.infinity,
+                decoration: const pw.BoxDecoration(
+                  color: PdfColors.green200,
+                ),
+                child: pw.Text('Executive Summary'),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text(
+                  'This sales report provides an overview of the revenue, payment distribution, and product performance for the selected period. Key insights include the dominance of $paymentMethod transactions and the high performance of the "${highProduct.first.item}" product. While the total sales for the day is RM ${totalSales.toStringAsFixed(2)}, the "${highProduct.first.item}" product accounts for ${getBreakdownUnit(productSold, highProduct.first.quantity * 100).toStringAsFixed(0)}% of total sales.'),
+              pw.SizedBox(height: 30),
               pw.Container(
                 padding: const pw.EdgeInsets.all(10),
                 width: double.infinity,
@@ -157,7 +173,7 @@ class ControllerSalesReport {
               pw.RichText(
                 text: pw.TextSpan(text: 'Cash: ', children: [
                   pw.TextSpan(
-                    text: '$totalCashPayment payments - RM ${cashPayment.toStringAsFixed(2)} (${percentCash().toStringAsFixed(2)}%)',
+                    text: '$totalCashPayment payments - RM ${cashPayment.toStringAsFixed(2)} (${percentCash().toStringAsFixed(0)}%)',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                   ),
                 ]),
@@ -166,7 +182,7 @@ class ControllerSalesReport {
               pw.RichText(
                 text: pw.TextSpan(text: 'QR Payment: ', children: [
                   pw.TextSpan(
-                    text: '$totalQrPayment payments - RM ${qrPayment.toStringAsFixed(2)} (${percentQr().toStringAsFixed(2)}%)',
+                    text: '$totalQrPayment payments - RM ${qrPayment.toStringAsFixed(2)} (${percentQr().toStringAsFixed(0)}%)',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                   ),
                 ]),
@@ -187,7 +203,7 @@ class ControllerSalesReport {
                     pw.RichText(
                       text: pw.TextSpan(text: '${item.item}: ', children: [
                         pw.TextSpan(
-                          text: '${item.quantity} units (${getBreakdownUnit(productSold, item.quantity).toStringAsFixed(2)}% of total sales)',
+                          text: '${item.quantity} units (${getBreakdownUnit(productSold, item.quantity * 100).toStringAsFixed(0)}% of total sales)',
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                         ),
                       ]),

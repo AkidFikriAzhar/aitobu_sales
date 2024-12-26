@@ -10,6 +10,7 @@ class Item {
   final String? imgUrl;
   final int colors;
   final Section? category;
+  final bool isDelete;
 
   Item({
     required this.id,
@@ -21,6 +22,7 @@ class Item {
     required this.colors,
     required this.totalSold,
     required this.category,
+    required this.isDelete,
   });
 
   factory Item.fromFirestore(dynamic doc) {
@@ -34,6 +36,7 @@ class Item {
       colors: doc['color'],
       totalSold: doc['totalSold'],
       category: doc['category'],
+      isDelete: doc['isDelete'],
     );
   }
 
@@ -48,6 +51,7 @@ class Item {
       'color': colors,
       'category': category,
       'totalSold': totalSold,
+      'isDelete': isDelete,
     };
   }
 }

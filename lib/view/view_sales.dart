@@ -27,7 +27,7 @@ class _ViewSalesState extends State<ViewSales> {
   final _controllerTicket = ControllerTicket();
   final _controllerCup = ControllerCupManagement();
 
-  final _itemQuery = FirebaseFirestore.instance.collection('items').withConverter(
+  final _itemQuery = FirebaseFirestore.instance.collection('items').where('isDelete', isEqualTo: false).withConverter(
         fromFirestore: (snapshot, _) => Item.fromFirestore(snapshot.data()!),
         toFirestore: (item, _) => item.toFirestore(),
       );

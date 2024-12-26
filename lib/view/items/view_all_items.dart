@@ -9,8 +9,10 @@ import 'package:go_router/go_router.dart';
 class ViewAllItems extends StatelessWidget {
   ViewAllItems({super.key});
 
-  final queryItem =
-      FirebaseFirestore.instance.collection('items').withConverter<Item>(fromFirestore: (snapshot, _) => Item.fromFirestore(snapshot.data()!), toFirestore: (item, _) => item.toFirestore());
+  final queryItem = FirebaseFirestore.instance
+      .collection('items')
+      .where('isDelete', isEqualTo: false)
+      .withConverter<Item>(fromFirestore: (snapshot, _) => Item.fromFirestore(snapshot.data()!), toFirestore: (item, _) => item.toFirestore());
 
   @override
   Widget build(BuildContext context) {

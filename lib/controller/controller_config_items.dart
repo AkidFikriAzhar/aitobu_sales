@@ -30,7 +30,7 @@ class ControllerConfigItems {
   Future<void> deleteFirebase(String id) async {
     final itemRef = FirebaseFirestore.instance.collection('items').doc(id);
 
-    await itemRef.delete();
+    await itemRef.update({'isDelete': true});
   }
 
   Future<void> editFirebase(String id, int colorVal) async {
@@ -48,7 +48,18 @@ class ControllerConfigItems {
       final colourVal = color.value;
 
       final itemRef = FirebaseFirestore.instance.collection('items').doc(id);
-      final item = Item(id: id, name: inputName.text.trim(), price: double.parse(inputPrice.text), cost: null, stock: null, imgUrl: null, colors: colourVal, category: null, totalSold: 0);
+      final item = Item(
+        id: id,
+        name: inputName.text.trim(),
+        price: double.parse(inputPrice.text),
+        cost: null,
+        stock: null,
+        imgUrl: null,
+        colors: colourVal,
+        category: null,
+        totalSold: 0,
+        isDelete: false,
+      );
 
       await itemRef.set(item.toFirestore());
 
