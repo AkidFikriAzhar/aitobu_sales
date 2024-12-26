@@ -1,7 +1,5 @@
 import 'package:aitobu_sales/controller/controller_sales_report.dart';
-import 'package:aitobu_sales/router.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class ViewDailyDashboard extends StatefulWidget {
   final DateTime currentDate;
@@ -26,13 +24,15 @@ class _ViewDailyDashboardState extends State<ViewDailyDashboard> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Sales Report'),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  context.push(MyRouter.pdfDailySales, extra: _controller);
-                },
-                icon: const Icon(Icons.picture_as_pdf)),
-          ],
+
+          /// Client not paying for this feature
+          // actions: [
+          //   IconButton(
+          //       onPressed: () {
+          //         context.push(MyRouter.pdfDailySales, extra: _controller);
+          //       },
+          //       icon: const Icon(Icons.picture_as_pdf)),
+          // ],
         ),
         body: FutureBuilder(
             future: _generateReport,
